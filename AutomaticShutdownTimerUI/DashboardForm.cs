@@ -16,7 +16,7 @@ namespace AutomaticShutdownTimerUI {
         int seconds;
         bool shutdownInitiated = false;
         System.Timers.Timer timer = new System.Timers.Timer(1000);
-        delegate void RefreshTextCallback();
+        delegate void Callback();
 
         public DashboardForm() {
             InitializeComponent();
@@ -61,7 +61,7 @@ namespace AutomaticShutdownTimerUI {
 
         private void RefreshTextBox() {
             if(timerTextBox.InvokeRequired) {
-                Invoke(new RefreshTextCallback(RefreshTextBox), new object[] { });
+                Invoke(new Callback(RefreshTextBox), new object[] { });
             } else {
                 timerTextBox.Text = $"{FormatTimeNumber(hours)} : {FormatTimeNumber(minutes)} : {FormatTimeNumber(seconds)}";
             }
@@ -87,7 +87,23 @@ namespace AutomaticShutdownTimerUI {
         }
 
         private bool CheckIfOver() {
-            return (seconds + minutes + hours > 0) ? false : true;
+            int remainingTime = seconds + minutes + hours;
+
+            if(remainingTime <= 30) {
+                //steal focus to warn the user
+                StealFocus();
+            }
+
+            return remainingTime <= 0;
+        }
+
+        private void StealFocus() {
+            if(this.InvokeRequired) {
+                Invoke(new Callback(StealFocus), new object[] { });
+            } else {
+                this.TopMost = true;
+                this.Activate();
+            }
         }
 
         private void SubtractTime() {
@@ -104,6 +120,7 @@ namespace AutomaticShutdownTimerUI {
         }
 
         private void stopButton_Click(object sender, EventArgs e) {
+            this.TopMost = false;
             secondsPicker.Value = seconds;
             minutesPicker.Value = minutes;
             hoursPicker.Value = hours;
