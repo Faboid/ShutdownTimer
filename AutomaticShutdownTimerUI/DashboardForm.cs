@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Timers;
 using System.Threading;
+using System.Diagnostics;
 
 namespace AutomaticShutdownTimerUI {
     public partial class DashboardForm : Form {
@@ -31,8 +32,16 @@ namespace AutomaticShutdownTimerUI {
             if(CheckIfOver()) {
                 if(!shutdownInitiated) {
                     shutdownInitiated = true;
-                    MessageBox.Show("Turning off pc...");
+
+                    //New thread to avoid stopping the process
+                    var thread = new Thread(() => MessageBox.Show("Turning off pc..."));
+                    thread.Start();
+
                     //turn off pc
+                    var processInfo = new ProcessStartInfo("shutdown", "/s /t 10");
+                    processInfo.UseShellExecute = true;
+                    processInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    Process.Start(processInfo);
                 }
             } else {
                 SubtractTime();
@@ -43,8 +52,11 @@ namespace AutomaticShutdownTimerUI {
         private void SetAllUp() {
             timerTextBox.Visible = false;
             hoursPicker.Visible = true;
+            hoursLabel.Visible = true;
             minutesPicker.Visible = true;
+            minutesLabel.Visible = true;
             secondsPicker.Visible = true;
+            secondsLabel.Visible = true;
         }
 
         private void RefreshTextBox() {
@@ -60,8 +72,11 @@ namespace AutomaticShutdownTimerUI {
             minutes = (int)minutesPicker.Value;
             seconds = (int)secondsPicker.Value;
             hoursPicker.Visible = false;
+            hoursLabel.Visible = false;
             minutesPicker.Visible = false;
+            minutesLabel.Visible = false; 
             secondsPicker.Visible = false;
+            secondsLabel.Visible = false;
 
             //set up timerTextBox text
             timerTextBox.Visible = true;
