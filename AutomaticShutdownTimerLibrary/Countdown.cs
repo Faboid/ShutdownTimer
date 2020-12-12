@@ -6,14 +6,14 @@ using System.Timers;
 namespace AutomaticShutdownTimerLibrary {
     public static class Countdown {
 
-        public static Timer timer = new Timer();
+        public static Timer timer = new Timer(1000);
 
-        public static void Start(int timeValue) {
-            
+        public static void Start() {
+            timer.Start();
         }
 
         public static void Stop() {
-
+            timer.Stop();
         }
 
     }

@@ -8,14 +8,11 @@ using System.Windows.Forms;
 using System.Timers;
 using System.Threading;
 using System.Diagnostics;
+using AutomaticShutdownTimerLibrary;
 
 namespace AutomaticShutdownTimerUI {
     public partial class DashboardForm : Form {
-        int hours;
-        int minutes;
-        int seconds;
-        bool shutdownInitiated = false;
-        System.Timers.Timer timer = new System.Timers.Timer(1000);
+        Time time;
         delegate void Callback();
 
         public DashboardForm() {
@@ -24,32 +21,11 @@ namespace AutomaticShutdownTimerUI {
         }
 
         private void InitializeFormValues() {
-            SetAllUp();
-            timer.Elapsed += Timer_Elapsed;
+            SetDefaultVisibilities();
+            Countdown.timer.Elapsed += Timer_Elapsed;
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
-            if(CheckIfOver()) {
-                if(!shutdownInitiated) {
-                    shutdownInitiated = true;
-
-                    //New thread to avoid stopping the process
-                    var thread = new Thread(() => MessageBox.Show("Turning off pc..."));
-                    thread.Start();
-
-                    //turn off pc
-                    var processInfo = new ProcessStartInfo("shutdown", "/s /t 10");
-                    processInfo.UseShellExecute = true;
-                    processInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    Process.Start(processInfo);
-                }
-            } else {
-                SubtractTime();
-                RefreshTextBox();
-            }
-        }
-
-        private void SetAllUp() {
+        private void SetDefaultVisibilities() {
             timerTextBox.Visible = false;
             hoursPicker.Visible = true;
             hoursLabel.Visible = true;
@@ -59,42 +35,21 @@ namespace AutomaticShutdownTimerUI {
             secondsLabel.Visible = true;
         }
 
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
+            Logic.MainLogic(time);
+
+            RefreshTextBox();
+            if(Logic.CheckTime(time, 30)) {
+                StealFocus();
+            }
+        }
+
         private void RefreshTextBox() {
             if(timerTextBox.InvokeRequired) {
                 Invoke(new Callback(RefreshTextBox), new object[] { });
             } else {
-                timerTextBox.Text = $"{FormatTimeNumber(hours)} : {FormatTimeNumber(minutes)} : {FormatTimeNumber(seconds)}";
+                timerTextBox.Text = TimeConverter.ConvertTimeValuesToString(time);
             }
-        }
-
-        private void startButton_Click(object sender, EventArgs e) {
-            hours = (int)hoursPicker.Value;
-            minutes = (int)minutesPicker.Value;
-            seconds = (int)secondsPicker.Value;
-            hoursPicker.Visible = false;
-            hoursLabel.Visible = false;
-            minutesPicker.Visible = false;
-            minutesLabel.Visible = false; 
-            secondsPicker.Visible = false;
-            secondsLabel.Visible = false;
-
-            //set up timerTextBox text
-            timerTextBox.Visible = true;
-            RefreshTextBox();
-
-            //start timer
-            timer.Start();
-        }
-
-        private bool CheckIfOver() {
-            int remainingTime = seconds + minutes + hours;
-
-            if(remainingTime <= 30) {
-                //steal focus to warn the user
-                StealFocus();
-            }
-
-            return remainingTime <= 0;
         }
 
         private void StealFocus() {
@@ -106,27 +61,36 @@ namespace AutomaticShutdownTimerUI {
             }
         }
 
-        private void SubtractTime() {
-            int timeValue = seconds + (minutes * 60) + (hours * 3600);
-            timeValue--;
-            int temp = timeValue % 3600;
-            seconds = temp % 60;
-            minutes = (temp - seconds) / 60;
-            hours = (timeValue - temp) / 3600;
-        }
+        private void startButton_Click(object sender, EventArgs e) {
+            if(!Countdown.timer.Enabled) {
+                time = new Time((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
-        private static string FormatTimeNumber(int input) {
-            return (input >= 10) ? $"{input}" : $"0{input}";
+                hoursPicker.Visible = false;
+                hoursLabel.Visible = false;
+                minutesPicker.Visible = false;
+                minutesLabel.Visible = false;
+                secondsPicker.Visible = false;
+                secondsLabel.Visible = false;
+
+                //set up timerTextBox text
+                timerTextBox.Visible = true;
+                RefreshTextBox();
+
+                //start timer
+                Countdown.Start();
+            }
         }
 
         private void stopButton_Click(object sender, EventArgs e) {
             this.TopMost = false;
-            secondsPicker.Value = seconds;
-            minutesPicker.Value = minutes;
-            hoursPicker.Value = hours;
-            SetAllUp();
+
+            secondsPicker.Value = time.Seconds;
+            minutesPicker.Value = time.Minutes;
+            hoursPicker.Value = time.Hours;
+
+            SetDefaultVisibilities();
             //stop timer
-            timer.Stop();
+            Countdown.Stop();
         }
     }
 }
