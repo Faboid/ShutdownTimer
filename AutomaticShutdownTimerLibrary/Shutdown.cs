@@ -8,6 +8,7 @@ namespace AutomaticShutdownTimerLibrary {
 
         public static void Start() {
             var processInfo = new ProcessStartInfo("shutdown", "/s /t 10");
+            processInfo.CreateNoWindow = true;
             processInfo.UseShellExecute = true;
             processInfo.WindowStyle = ProcessWindowStyle.Hidden;
             Process.Start(processInfo);
