@@ -23,6 +23,9 @@ namespace AutomaticShutdownTimerUI {
         private void InitializeFormValues() {
             SetDefaultVisibilities();
             Countdown.timer.Elapsed += Timer_Elapsed;
+
+            //set to 0 to avoid null-reference exceptions
+            time = new Time(0, 0, 0);
         }
 
         private void SetDefaultVisibilities() {
@@ -61,8 +64,19 @@ namespace AutomaticShutdownTimerUI {
             }
         }
 
+        private bool WarnIfZero() {
+            if((secondsPicker.Value + (minutesPicker.Value * 60) + (hoursPicker.Value * 3600)) == 0) {
+                DialogResult result = MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
+                if(result == DialogResult.Yes) {
+                    Shutdown.Start();
+                }
+                return true;
+            }
+            return false;
+        }
+
         private void startButton_Click(object sender, EventArgs e) {
-            if(!Countdown.timer.Enabled) {
+            if(!Countdown.timer.Enabled && !WarnIfZero()) {
                 time = new Time((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
                 hoursPicker.Visible = false;
