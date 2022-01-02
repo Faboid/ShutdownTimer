@@ -47,5 +47,26 @@ namespace AutomaticShutdownTimerTests {
 
         }
 
+        [Theory]
+        [InlineData(2, 15, 3)]
+        [InlineData(12, 0, 0)]
+        [InlineData(0, 0, 9)]
+        public void GetCorrectSecondsAmount(int hours, int minutes, int seconds) {
+
+            //arrange
+            Time time = new Time(hours, minutes, seconds);
+            int expected = seconds + (minutes * 60) + (hours * 3600);
+            int actual;
+
+            //act
+            actual = time.GetTotalTimeValue();
+
+            //assert
+            Assert.Equal(expected, actual);
+
+        }
+
+
+
     }
 }
