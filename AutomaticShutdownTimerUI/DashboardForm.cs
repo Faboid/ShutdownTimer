@@ -66,7 +66,7 @@ namespace AutomaticShutdownTimerUI {
         }
 
         private void startButton_Click(object sender, EventArgs e) {
-            if(!Countdown.timer.Enabled && !WarnIfZero()) {
+            if(!WarnIfZero()) {
                 time = new Time((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
                 SetRunningVisibilities();
@@ -92,6 +92,8 @@ namespace AutomaticShutdownTimerUI {
         }
 
         private void SetRunningVisibilities() {
+            startButton.Enabled = false;
+            stopButton.Enabled = true;
 
             hoursPicker.Visible = false;
             hoursLabel.Visible = false;
@@ -105,6 +107,9 @@ namespace AutomaticShutdownTimerUI {
 
         private void SetDefaultVisibilities() {
             timerTextBox.Visible = false;
+
+            startButton.Enabled = true;
+            stopButton.Enabled = false;
 
             hoursPicker.Visible = true;
             hoursLabel.Visible = true;
