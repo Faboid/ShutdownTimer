@@ -7,10 +7,9 @@ namespace AutomaticShutdownTimerLibrary {
     public static class Logic {
 
         private static bool shutdownInitiated = false;
-        private const int endTimerValue = 0;
 
         public static void MainLogic(Time time) {
-            if(CheckTime(time, endTimerValue)) {
+            if(IsTimeUp(time)) {
                 if(!shutdownInitiated) {
                     Countdown.Stop();
                     shutdownInitiated = true;
@@ -23,7 +22,7 @@ namespace AutomaticShutdownTimerLibrary {
             }
         }
 
-        public static bool CheckTime(Time time, int timeValue) => time.GetTotalTimeValue() <= timeValue;
+        private static bool IsTimeUp(Time time) => time.GetTotalTimeValue() <= 0;
 
     }
 }

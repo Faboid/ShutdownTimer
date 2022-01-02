@@ -32,7 +32,7 @@ namespace AutomaticShutdownTimerUI {
             Logic.MainLogic(time);
 
             RefreshTextBox();
-            if(Logic.CheckTime(time, 30)) {
+            if(time.GetTotalTimeValue() <= 30) {
                 StealFocus();
             }
         }
