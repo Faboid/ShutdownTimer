@@ -23,6 +23,12 @@ namespace AutomaticShutdownTimerLibrary {
 
         public int GetTotalTimeValue() => Seconds + (Minutes * 60) + (Hours * 3600);
 
+        public override string ToString() {
+            return $"{FormatTimeNumber(Hours)} : {FormatTimeNumber(Minutes)} : {FormatTimeNumber(Seconds)}";
+        }
+
+        private static string FormatTimeNumber(int input) => (input >= 10) ? $"{input}" : $"0{input}";
+
         private void AssignValuesFromTotalTimeValue(int timeValue) {
             int time = timeValue % 3600;
             int seconds = time % 60;
@@ -33,12 +39,6 @@ namespace AutomaticShutdownTimerLibrary {
             this.Minutes = minutes;
             this.Seconds = seconds;
         }
-
-        public override string ToString() {
-            return $"{FormatTimeNumber(Hours)} : {FormatTimeNumber(Minutes)} : {FormatTimeNumber(Seconds)}";
-        }
-
-        private static string FormatTimeNumber(int input) => (input >= 10) ? $"{input}" : $"0{input}";
 
     }
 }
