@@ -28,16 +28,6 @@ namespace AutomaticShutdownTimerUI {
             time = new Time(0, 0, 0);
         }
 
-        private void SetDefaultVisibilities() {
-            timerTextBox.Visible = false;
-            hoursPicker.Visible = true;
-            hoursLabel.Visible = true;
-            minutesPicker.Visible = true;
-            minutesLabel.Visible = true;
-            secondsPicker.Visible = true;
-            secondsLabel.Visible = true;
-        }
-
         private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
             Logic.MainLogic(time);
 
@@ -79,15 +69,9 @@ namespace AutomaticShutdownTimerUI {
             if(!Countdown.timer.Enabled && !WarnIfZero()) {
                 time = new Time((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
-                hoursPicker.Visible = false;
-                hoursLabel.Visible = false;
-                minutesPicker.Visible = false;
-                minutesLabel.Visible = false;
-                secondsPicker.Visible = false;
-                secondsLabel.Visible = false;
+                SetRunningVisibilities();
 
                 //set up timerTextBox text
-                timerTextBox.Visible = true;
                 RefreshTextBox();
 
                 //start timer
@@ -105,6 +89,29 @@ namespace AutomaticShutdownTimerUI {
             SetDefaultVisibilities();
             //stop timer
             Countdown.Stop();
+        }
+
+        private void SetRunningVisibilities() {
+
+            hoursPicker.Visible = false;
+            hoursLabel.Visible = false;
+            minutesPicker.Visible = false;
+            minutesLabel.Visible = false;
+            secondsPicker.Visible = false;
+            secondsLabel.Visible = false;
+
+            timerTextBox.Visible = true;
+        }
+
+        private void SetDefaultVisibilities() {
+            timerTextBox.Visible = false;
+
+            hoursPicker.Visible = true;
+            hoursLabel.Visible = true;
+            minutesPicker.Visible = true;
+            minutesLabel.Visible = true;
+            secondsPicker.Visible = true;
+            secondsLabel.Visible = true;
         }
     }
 }
