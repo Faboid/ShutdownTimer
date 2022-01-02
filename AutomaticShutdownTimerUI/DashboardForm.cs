@@ -51,7 +51,7 @@ namespace AutomaticShutdownTimerUI {
             if(timerTextBox.InvokeRequired) {
                 Invoke(new Callback(RefreshTextBox), new object[] { });
             } else {
-                timerTextBox.Text = TimeConverter.ConvertTimeValuesToString(time);
+                timerTextBox.Text = time.ToString();
             }
         }
 
