@@ -6,17 +6,14 @@ using System.Threading;
 namespace AutomaticShutdownTimerLibrary {
     public static class Logic {
 
-        private static bool shutdownInitiated = false;
+        private static readonly Shutdown shutdown = new Shutdown();
 
         public static void MainLogic(Time time) {
             if(IsTimeUp(time)) {
-                if(!shutdownInitiated) {
-                    Countdown.Stop();
-                    shutdownInitiated = true;
+                Countdown.Stop();
 
-                    //turn off pc
-                    Shutdown.Start();
-                }
+                //turn off pc
+                shutdown.Start();
             } else {
                 time.SubtractOneSecond();
             }

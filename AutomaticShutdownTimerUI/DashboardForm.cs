@@ -58,7 +58,8 @@ namespace AutomaticShutdownTimerUI {
             if((secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0) {
                 DialogResult result = MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
                 if(result == DialogResult.Yes) {
-                    Shutdown.Start();
+                    //todo - introduce different way of handling this
+                    Logic.MainLogic(new Time(0, 0, 0));
                 }
                 return true;
             }
