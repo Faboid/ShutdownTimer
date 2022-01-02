@@ -34,5 +34,11 @@ namespace AutomaticShutdownTimerLibrary {
             this.Seconds = seconds;
         }
 
+        public override string ToString() {
+            return $"{FormatTimeNumber(Hours)} : {FormatTimeNumber(Minutes)} : {FormatTimeNumber(Seconds)}";
+        }
+
+        private static string FormatTimeNumber(int input) => (input >= 10) ? $"{input}" : $"0{input}";
+
     }
 }
