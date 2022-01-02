@@ -65,7 +65,7 @@ namespace AutomaticShutdownTimerUI {
         }
 
         private bool WarnIfZero() {
-            if((secondsPicker.Value + (minutesPicker.Value * 60) + (hoursPicker.Value * 3600)) == 0) {
+            if((secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0) {
                 DialogResult result = MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
                 if(result == DialogResult.Yes) {
                     Shutdown.Start();
