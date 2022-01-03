@@ -24,10 +24,8 @@ namespace AutomaticShutdownTimerLibrary {
         public int GetTotalTimeValue() => Seconds + (Minutes * 60) + (Hours * 3600);
 
         public override string ToString() {
-            return $"{FormatTimeNumber(Hours)} : {FormatTimeNumber(Minutes)} : {FormatTimeNumber(Seconds)}";
+            return $"{Hours:00} : {Minutes:00} : {Seconds:00}";
         }
-
-        private static string FormatTimeNumber(int input) => (input >= 10) ? $"{input}" : $"0{input}";
 
         private void AssignValuesFromTotalTimeValue(int timeValue) {
             int time = timeValue % 3600;
