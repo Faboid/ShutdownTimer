@@ -22,7 +22,7 @@ namespace AutomaticShutdownTimerUI {
 
         private void InitializeFormValues() {
             SetDefaultVisibilities();
-            Countdown.timer.Elapsed += Timer_Elapsed;
+            DeprecatedCountdown.timer.Elapsed += Timer_Elapsed;
 
             //set to 0 to avoid null-reference exceptions
             time = new Time(0, 0, 0);
@@ -76,7 +76,7 @@ namespace AutomaticShutdownTimerUI {
                 RefreshTextBox();
 
                 //start timer
-                Countdown.Start();
+                DeprecatedCountdown.Start();
             }
         }
 
@@ -89,7 +89,7 @@ namespace AutomaticShutdownTimerUI {
 
             SetDefaultVisibilities();
             //stop timer
-            Countdown.Stop();
+            DeprecatedCountdown.Stop();
         }
 
         private void SetRunningVisibilities() {

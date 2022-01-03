@@ -10,7 +10,7 @@ namespace AutomaticShutdownTimerLibrary {
 
         public static void MainLogic(Time time) {
             if(IsTimeUp(time)) {
-                Countdown.Stop();
+                DeprecatedCountdown.Stop();
 
                 //turn off pc
                 shutdown.Start();

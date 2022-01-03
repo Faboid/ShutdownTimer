@@ -8,6 +8,8 @@ namespace AutomaticShutdownTimerLibrary {
 
         public event EventHandler<string> SecondHasPassed;
 
+        private List<EventHandler> alarms = new List<EventHandler>();
+
         private readonly Time time;
         private readonly Timer timer = new Timer(1000); // one second
 
@@ -27,6 +29,14 @@ namespace AutomaticShutdownTimerLibrary {
 
         public void Stop() {
             timer.Stop();
+        }
+
+        public void SetAlarm(EventHandler eventHandler, int secondsLeft) {
+
+        }
+
+        private void CheckAlarms() {
+
         }
 
     }

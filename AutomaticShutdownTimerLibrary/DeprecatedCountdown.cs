@@ -4,7 +4,7 @@ using System.Text;
 using System.Timers;
 
 namespace AutomaticShutdownTimerLibrary {
-    public static class Countdown {
+    public static class DeprecatedCountdown {
 
         public static Timer timer = new Timer(1000);
 
