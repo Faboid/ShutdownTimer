@@ -16,12 +16,12 @@ namespace AutomaticShutdownTimerLibrary {
         }
 
         public void SubtractOneSecond() {
-            int timeValue = GetTotalTimeValue();
+            int timeValue = ToSeconds();
             timeValue--;
             AssignValuesFromTotalTimeValue(timeValue);
         }
 
-        public int GetTotalTimeValue() => Seconds + (Minutes * 60) + (Hours * 3600);
+        public int ToSeconds() => Seconds + (Minutes * 60) + (Hours * 3600);
 
         public override string ToString() {
             return $"{Hours:00} : {Minutes:00} : {Seconds:00}";

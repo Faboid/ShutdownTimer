@@ -19,7 +19,7 @@ namespace AutomaticShutdownTimerLibrary {
             }
         }
 
-        private static bool IsTimeUp(Time time) => time.GetTotalTimeValue() <= 0;
+        private static bool IsTimeUp(Time time) => time.ToSeconds() <= 0;
 
     }
 }

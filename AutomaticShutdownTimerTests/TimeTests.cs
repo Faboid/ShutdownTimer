@@ -59,7 +59,7 @@ namespace AutomaticShutdownTimerTests {
             int actual;
 
             //act
-            actual = time.GetTotalTimeValue();
+            actual = time.ToSeconds();
 
             //assert
             Assert.Equal(expected, actual);
