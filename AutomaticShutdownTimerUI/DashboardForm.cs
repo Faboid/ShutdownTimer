@@ -40,18 +40,20 @@ namespace AutomaticShutdownTimerUI {
         private void RefreshTextBox() {
             if(timerTextBox.InvokeRequired) {
                 Invoke(new Callback(RefreshTextBox), new object[] { });
-            } else {
-                timerTextBox.Text = time.ToString();
-            }
+                return;
+            } 
+            
+            timerTextBox.Text = time.ToString();
         }
 
         private void StealFocus() {
             if(this.InvokeRequired) {
                 Invoke(new Callback(StealFocus), new object[] { });
-            } else {
-                this.TopMost = true;
-                this.Activate();
+                return;
             }
+
+            this.TopMost = true;
+            this.Activate();
         }
 
         private bool WarnIfZero() {
