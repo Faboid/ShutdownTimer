@@ -10,9 +10,7 @@ namespace AutomaticShutdownTimerLibrary {
         public int Hours { get; private set; }
 
         public Time(int hours, int minutes, int seconds) {
-            Hours = hours;
-            Minutes = minutes;
-            Seconds = seconds;
+            Set(hours, minutes, seconds);
         }
 
         public void Set(int hours, int minutes, int seconds) {

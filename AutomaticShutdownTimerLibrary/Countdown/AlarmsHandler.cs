@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace AutomaticShutdownTimerLibrary.Countdown {
-    public class AlarmsHandler {
+    public class AlarmsHandler : IAlarmsHandler {
 
         private readonly List<Alarm> alarms = new List<Alarm>();
 

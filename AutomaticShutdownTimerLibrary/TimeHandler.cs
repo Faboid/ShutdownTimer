@@ -9,13 +9,13 @@ namespace AutomaticShutdownTimerLibrary {
 
         public event EventHandler<string> SecondHasPassed;
 
-        private AlarmsHandler alarms = new AlarmsHandler();
-
-        private readonly Time time;
         private readonly Timer timer = new Timer(1000); // one second
 
-        public TimeHandler(int hours, int minutes, int seconds) {
-            time = new Time(hours, minutes, seconds);
+        private readonly IAlarmsHandler alarms;
+        private Time time;
+
+        public TimeHandler(IAlarmsHandler alarms) {
+            this.alarms = alarms;
             timer.Elapsed += SecondPassed;
             CheckAlarms();
         }
@@ -25,16 +25,18 @@ namespace AutomaticShutdownTimerLibrary {
             SecondHasPassed?.Invoke(this, time.ToString());
         }
 
+        public void Start() {
+            timer.Start();
+        }
+
         public void Start(int hours, int minutes, int seconds) {
+            time ??= new Time(hours, minutes, seconds);
+
             time.Set(hours, minutes, seconds);
         }
 
         public void Stop() {
             timer.Stop();
-        }
-
-        public void SetAlarm(EventHandler eventHandler, int secondsLeft, bool singleFire) {
-            alarms.Register(eventHandler, secondsLeft, singleFire);
         }
 
         public void ResetAlarms() => alarms.ResetAll();
