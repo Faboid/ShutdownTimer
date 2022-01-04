@@ -25,8 +25,8 @@ namespace AutomaticShutdownTimerLibrary {
             SecondHasPassed?.Invoke(this, time.ToString());
         }
 
-        public void Start() {
-            timer.Start();
+        public void Start(int hours, int minutes, int seconds) {
+            time.Set(hours, minutes, seconds);
         }
 
         public void Stop() {

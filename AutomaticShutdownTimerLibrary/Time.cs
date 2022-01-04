@@ -10,9 +10,15 @@ namespace AutomaticShutdownTimerLibrary {
         public int Hours { get; private set; }
 
         public Time(int hours, int minutes, int seconds) {
-            this.Hours = hours;
-            this.Minutes = minutes;
-            this.Seconds = seconds;
+            Hours = hours;
+            Minutes = minutes;
+            Seconds = seconds;
+        }
+
+        public void Set(int hours, int minutes, int seconds) {
+            Hours = hours;
+            Minutes = minutes;
+            Seconds = seconds;
         }
 
         public void SubtractOneSecond() {
