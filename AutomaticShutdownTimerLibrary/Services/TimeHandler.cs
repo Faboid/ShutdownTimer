@@ -1,10 +1,11 @@
-﻿using AutomaticShutdownTimerLibrary.Countdown;
+﻿using AutomaticShutdownTimerLibrary.Models;
+using AutomaticShutdownTimerLibrary.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 
-namespace AutomaticShutdownTimerLibrary {
+namespace AutomaticShutdownTimerLibrary.Services {
     public class TimeHandler {
 
         public event EventHandler<string> SecondHasPassed;

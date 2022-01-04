@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AutomaticShutdownTimerLibrary {
+namespace AutomaticShutdownTimerLibrary.Models {
     public class Time {
 
         public int Seconds { get; private set; }
@@ -25,7 +25,7 @@ namespace AutomaticShutdownTimerLibrary {
             AssignValuesFromTotalTimeValue(timeValue);
         }
 
-        public int ToSeconds() => Seconds + (Minutes * 60) + (Hours * 3600);
+        public int ToSeconds() => Seconds + Minutes * 60 + Hours * 3600;
 
         public override string ToString() {
             return $"{Hours:00} : {Minutes:00} : {Seconds:00}";
@@ -37,9 +37,9 @@ namespace AutomaticShutdownTimerLibrary {
             int minutes = (time - seconds) / 60;
             int hours = (timeValue - time) / 3600;
 
-            this.Hours = hours;
-            this.Minutes = minutes;
-            this.Seconds = seconds;
+            Hours = hours;
+            Minutes = minutes;
+            Seconds = seconds;
         }
 
     }

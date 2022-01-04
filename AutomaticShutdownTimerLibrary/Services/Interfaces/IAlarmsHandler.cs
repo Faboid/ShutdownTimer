@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AutomaticShutdownTimerLibrary.Countdown {
+namespace AutomaticShutdownTimerLibrary.Services.Interfaces {
     public interface IAlarmsHandler {
 
         void RunAllBelow(int currentTime);

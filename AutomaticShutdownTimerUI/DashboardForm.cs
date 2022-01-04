@@ -9,6 +9,7 @@ using System.Timers;
 using System.Threading;
 using System.Diagnostics;
 using AutomaticShutdownTimerLibrary;
+using AutomaticShutdownTimerLibrary.Models;
 
 namespace AutomaticShutdownTimerUI {
     public partial class DashboardForm : Form {

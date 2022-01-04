@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AutomaticShutdownTimerLibrary.Countdown {
+namespace AutomaticShutdownTimerLibrary.Models {
     public class Alarm {
 
         public EventHandler Event { get; private set; }
