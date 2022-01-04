@@ -15,34 +15,30 @@ namespace AutomaticShutdownTimerLibrary.Services {
         private readonly IAlarmsHandler alarms;
         private Time time;
 
-        public TimeHandler(IAlarmsHandler alarms) {
+        public TimeHandler(Time time, IAlarmsHandler alarms) {
+            this.time = time;
             this.alarms = alarms;
             timer.Elapsed += SecondPassed;
-            CheckAlarms();
         }
 
         private void SecondPassed(object sender, ElapsedEventArgs e) {
             time.SubtractOneSecond();
             SecondHasPassed?.Invoke(this, time.ToString());
+            alarms.RunAllBelow(time.ToSeconds());
         }
 
         public void Start() {
+            alarms.ResetAll();
             timer.Start();
         }
 
         public void Start(int hours, int minutes, int seconds) {
-            time ??= new Time(hours, minutes, seconds);
-
             time.Set(hours, minutes, seconds);
         }
 
         public void Stop() {
             timer.Stop();
         }
-
-        public void ResetAlarms() => alarms.ResetAll();
-
-        private void CheckAlarms() => alarms.RunAllBelow(time.ToSeconds());
 
     }
 }
