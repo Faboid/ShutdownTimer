@@ -6,7 +6,7 @@ namespace AutomaticShutdownTimerLibrary.Services.Interfaces {
     public interface IAlarmsHandler {
 
         void RunAllBelow(int currentTime);
-        void Register(EventHandler eventHandler, int timeToEvoke, bool singleFire);
+        void Register(EventHandler<EventArgs> eventHandler, int timeToEvoke, bool singleFire);
         void ResetAll();
 
     }

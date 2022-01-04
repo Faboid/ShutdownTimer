@@ -13,11 +13,11 @@ namespace AutomaticShutdownTimerLibrary.Services {
         public void RunAllBelow(int currentTime) {
             var toInvoke = alarms.Where(x => x.TimeToEvoke >= currentTime);
             foreach(var alarm in toInvoke) {
-                alarm.Event?.Invoke(this, EventArgs.Empty);
+                alarm.Invoke();
             }
         }
 
-        public void Register(EventHandler eventHandler, int timeToEvoke, bool singleFire) {
+        public void Register(EventHandler<EventArgs> eventHandler, int timeToEvoke, bool singleFire) {
             alarms.Add(new Alarm(eventHandler, timeToEvoke, singleFire));
         }
 

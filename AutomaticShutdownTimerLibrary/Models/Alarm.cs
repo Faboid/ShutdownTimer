@@ -5,12 +5,12 @@ using System.Text;
 namespace AutomaticShutdownTimerLibrary.Models {
     public class Alarm {
 
-        public EventHandler Event { get; private set; }
+        public EventHandler<EventArgs> Event { get; private set; }
         public int TimeToEvoke { get; private set; }
         public bool SingleFire { get; private set; }
         private bool fired = false;
 
-        public Alarm(EventHandler eventHandler, int timeToEvoke, bool singleFire) {
+        public Alarm(EventHandler<EventArgs> eventHandler, int timeToEvoke, bool singleFire) {
             Event = eventHandler;
             TimeToEvoke = timeToEvoke;
             SingleFire = singleFire;
