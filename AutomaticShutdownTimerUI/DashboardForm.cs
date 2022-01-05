@@ -54,7 +54,7 @@ namespace AutomaticShutdownTimerUI {
 
         private DialogResult Warn() => MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
 
-        private void startButton_Click(object sender, EventArgs e) {
+        private void StartButton_Click(object sender, EventArgs e) {
 
             if(IsTimeZero()) {
                 DialogResult response = Warn();
@@ -70,7 +70,7 @@ namespace AutomaticShutdownTimerUI {
             RefreshTextBox();
         }
 
-        private void stopButton_Click(object sender, EventArgs e) {
+        private void StopButton_Click(object sender, EventArgs e) {
             this.TopMost = false;
 
             var time = timeHandler.GetTimeAsReadOnly();
