@@ -59,26 +59,24 @@ namespace AutomaticShutdownTimerUI {
             this.Activate();
         }
 
-        private bool WarnIfZero() {
-            if((secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0) {
-                DialogResult result = MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
-                if(result == DialogResult.Yes) {
-                    shutdown.Start();
-                }
-                return true;
-            }
-            return false;
-        }
+        private bool IsTimeZero() => (secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0;
+
+        private DialogResult Warn() => MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
 
         private void startButton_Click(object sender, EventArgs e) {
-            if(!WarnIfZero()) {
-                timeHandler.Start((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
-                SetRunningVisibilities();
+            if(IsTimeZero()) {
+                DialogResult response = Warn();
+                if(response != DialogResult.Yes) {
+                    return;
+                }
 
-                //set up timerTextBox text
-                RefreshTextBox();
+                shutdown.Start();
             }
+
+            timeHandler.Start((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
+            SetRunningVisibilities();
+            RefreshTextBox();
         }
 
         private void stopButton_Click(object sender, EventArgs e) {
