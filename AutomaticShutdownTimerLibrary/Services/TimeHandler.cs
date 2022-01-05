@@ -1,4 +1,5 @@
 ﻿using AutomaticShutdownTimerLibrary.Models;
+using AutomaticShutdownTimerLibrary.Models.Interfaces;
 using AutomaticShutdownTimerLibrary.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,12 @@ using System.Timers;
 namespace AutomaticShutdownTimerLibrary.Services {
     public class TimeHandler {
 
-        public event EventHandler<string> SecondHasPassed;
+        public event EventHandler<IReadOnlyTime> SecondHasPassed;
 
         private readonly Timer timer = new Timer(1000); // one second
 
         private readonly IAlarmsHandler alarms;
-        private Time time;
+        private readonly Time time;
 
         public TimeHandler(Time time, IAlarmsHandler alarms) {
             this.time = time;
@@ -21,23 +22,23 @@ namespace AutomaticShutdownTimerLibrary.Services {
             timer.Elapsed += SecondPassed;
         }
 
-        private void SecondPassed(object sender, ElapsedEventArgs e) {
-            time.SubtractOneSecond();
-            SecondHasPassed?.Invoke(this, time.ToString());
-            alarms.RunAllBelow(time.ToSeconds());
-        }
-
-        public void Start() {
-            alarms.ResetAll();
-            timer.Start();
+        public IReadOnlyTime GetTimeAsReadOnly() {
+            return time;
         }
 
         public void Start(int hours, int minutes, int seconds) {
             time.Set(hours, minutes, seconds);
+            timer.Start();
         }
 
         public void Stop() {
             timer.Stop();
+        }
+
+        private void SecondPassed(object sender, ElapsedEventArgs e) {
+            time.SubtractOneSecond();
+            SecondHasPassed?.Invoke(this, time);
+            alarms.RunAllBelow(time.ToSeconds());
         }
 
     }

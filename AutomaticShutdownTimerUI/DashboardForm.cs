@@ -10,10 +10,17 @@ using System.Threading;
 using System.Diagnostics;
 using AutomaticShutdownTimerLibrary;
 using AutomaticShutdownTimerLibrary.Models;
+using AutomaticShutdownTimerLibrary.Services;
+using AutomaticShutdownTimerLibrary.Services.Interfaces;
+using AutomaticShutdownTimerLibrary.Models.Interfaces;
 
 namespace AutomaticShutdownTimerUI {
     public partial class DashboardForm : Form {
-        Time time;
+
+        IAlarmsHandler alarmsHandler;
+        TimeHandler timeHandler;
+
+        readonly Shutdown shutdown = new Shutdown();
         delegate void Callback();
 
         public DashboardForm() {
@@ -23,18 +30,21 @@ namespace AutomaticShutdownTimerUI {
 
         private void InitializeFormValues() {
             SetDefaultVisibilities();
-            DeprecatedCountdown.timer.Elapsed += Timer_Elapsed;
 
-            //set to 0 to avoid null-reference exceptions
-            time = new Time(0, 0, 0);
+            alarmsHandler = new AlarmsHandler();
+            timeHandler = new TimeHandler(new Time(0, 0, 0), alarmsHandler);
+
+            timeHandler.SecondHasPassed += TimeHandler_SecondHasPassed;
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
-            Logic.MainLogic(time);
-
+        private void TimeHandler_SecondHasPassed(object sender, IReadOnlyTime e) {
             RefreshTextBox();
-            if(time.ToSeconds() <= 30) {
+
+            if(e.ToSeconds() <= 30) {
                 StealFocus();
+            }
+            if(e.ToSeconds() <= 0) {
+                shutdown.Start();
             }
         }
 
@@ -44,7 +54,7 @@ namespace AutomaticShutdownTimerUI {
                 return;
             } 
             
-            timerTextBox.Text = time.ToString();
+            timerTextBox.Text = timeHandler.GetTimeAsReadOnly().ToString();
         }
 
         private void StealFocus() {
@@ -61,8 +71,7 @@ namespace AutomaticShutdownTimerUI {
             if((secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0) {
                 DialogResult result = MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
                 if(result == DialogResult.Yes) {
-                    //todo - introduce different way of handling this
-                    Logic.MainLogic(new Time(0, 0, 0));
+                    shutdown.Start();
                 }
                 return true;
             }
@@ -71,28 +80,27 @@ namespace AutomaticShutdownTimerUI {
 
         private void startButton_Click(object sender, EventArgs e) {
             if(!WarnIfZero()) {
-                time = new Time((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
+                //start timer
+                timeHandler.Start((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
                 SetRunningVisibilities();
 
                 //set up timerTextBox text
                 RefreshTextBox();
-
-                //start timer
-                DeprecatedCountdown.Start();
             }
         }
 
         private void stopButton_Click(object sender, EventArgs e) {
             this.TopMost = false;
 
+            var time = timeHandler.GetTimeAsReadOnly();
             secondsPicker.Value = time.Seconds;
             minutesPicker.Value = time.Minutes;
             hoursPicker.Value = time.Hours;
 
             SetDefaultVisibilities();
             //stop timer
-            DeprecatedCountdown.Stop();
+            timeHandler.Stop();
         }
 
         private void SetRunningVisibilities() {

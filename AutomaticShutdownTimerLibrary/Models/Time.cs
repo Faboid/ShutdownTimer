@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AutomaticShutdownTimerLibrary.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AutomaticShutdownTimerLibrary.Models {
-    public class Time {
+    public class Time : IReadOnlyTime {
 
         public int Seconds { get; private set; }
         public int Minutes { get; private set; }
