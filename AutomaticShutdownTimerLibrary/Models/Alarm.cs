@@ -5,20 +5,20 @@ using System.Text;
 namespace AutomaticShutdownTimerLibrary.Models {
     public class Alarm {
 
-        public EventHandler<EventArgs> Event { get; private set; }
+        public Action RingAction { get; private set; }
         public int TimeToEvoke { get; private set; }
         public bool SingleFire { get; private set; }
         private bool fired = false;
 
-        public Alarm(EventHandler<EventArgs> eventHandler, int timeToEvoke, bool singleFire) {
-            Event = eventHandler;
+        public Alarm(Action ringAction, int timeToEvoke, bool singleFire) {
+            RingAction = ringAction;
             TimeToEvoke = timeToEvoke;
             SingleFire = singleFire;
         }
 
         public void Invoke() {
             if(SingleFire == false || fired == false) {
-                Event?.Invoke(this, EventArgs.Empty);
+                RingAction?.Invoke();
                 fired = true;
             }
         }

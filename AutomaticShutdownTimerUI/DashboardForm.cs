@@ -32,20 +32,12 @@ namespace AutomaticShutdownTimerUI {
             SetDefaultVisibilities();
 
             alarmsHandler = new AlarmsHandler();
+            alarmsHandler.Register(shutdown.Start, 0, true);
+            alarmsHandler.Register(StealFocus, 30, false);
+
             timeHandler = new TimeHandler(new Time(0, 0, 0), alarmsHandler);
 
-            timeHandler.SecondHasPassed += TimeHandler_SecondHasPassed;
-        }
-
-        private void TimeHandler_SecondHasPassed(object sender, IReadOnlyTime e) {
-            RefreshTextBox();
-
-            if(e.ToSeconds() <= 30) {
-                StealFocus();
-            }
-            if(e.ToSeconds() <= 0) {
-                shutdown.Start();
-            }
+            timeHandler.SecondHasPassed += (obj, time) => { RefreshTextBox(); };
         }
 
         private void RefreshTextBox() {
@@ -80,7 +72,6 @@ namespace AutomaticShutdownTimerUI {
 
         private void startButton_Click(object sender, EventArgs e) {
             if(!WarnIfZero()) {
-                //start timer
                 timeHandler.Start((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
 
                 SetRunningVisibilities();
@@ -99,7 +90,6 @@ namespace AutomaticShutdownTimerUI {
             hoursPicker.Value = time.Hours;
 
             SetDefaultVisibilities();
-            //stop timer
             timeHandler.Stop();
         }
 

@@ -9,16 +9,14 @@ using Xunit;
 namespace AutomaticShutdownTimerTests {
     public class AlarmTests {
 
-        event EventHandler<EventArgs> randomEvent;
-
         [Fact]
         public void SingleEventCall() {
 
             //arrange
             int count = 0;
             int expected = 1;
-            randomEvent += (s, e) => { count++; };
-            var alarm = new Alarm(randomEvent, 30, true);
+            void ringAction () { count++; };
+            var alarm = new Alarm(ringAction, 30, true);
 
             //act
             alarm.Invoke();
@@ -35,8 +33,8 @@ namespace AutomaticShutdownTimerTests {
             //arrange
             int count = 0;
             int expected = 3;
-            randomEvent += (s, e) => { count++; };
-            var alarm = new Alarm(randomEvent, 30, false);
+            void ringAction() { count++; }
+            var alarm = new Alarm(ringAction, 30, false);
 
             //act
             alarm.Invoke();
@@ -54,8 +52,8 @@ namespace AutomaticShutdownTimerTests {
             //arrange
             int count = 0;
             int expected = 2;
-            randomEvent += (s, e) => { count++; };
-            var alarm = new Alarm(randomEvent, 30, true);
+            void ringAction () { count++; };
+            var alarm = new Alarm(ringAction, 30, true);
 
             //act
             alarm.Invoke();

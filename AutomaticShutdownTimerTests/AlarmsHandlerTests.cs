@@ -10,15 +10,13 @@ using Xunit;
 namespace AutomaticShutdownTimerTests {
     public class AlarmsHandlerTests {
 
-        event EventHandler<EventArgs> SomeEvent;
-
         [Fact]
         public void EventIsRaised() {
 
             //arrange
             IAlarmsHandler alarms = new AlarmsHandler();
             bool IsInvoked = false;
-            SomeEvent += (s, e) => IsInvoked = true;
+            void SomeEvent() { IsInvoked = true; };
 
             //act
             alarms.Register(SomeEvent, 30, true);
@@ -35,7 +33,7 @@ namespace AutomaticShutdownTimerTests {
             //arrange
             IAlarmsHandler alarms = new AlarmsHandler();
             bool IsInvoked = false;
-            SomeEvent += (s, e) => IsInvoked = true;
+            void SomeEvent() { IsInvoked = true; };
 
             //act
             alarms.Register(SomeEvent, 30, true);
@@ -60,9 +58,9 @@ namespace AutomaticShutdownTimerTests {
             bool IsInvoked2 = false;
             bool IsInvoked3 = false;
 
-            SomeEvent1 += (s, e) => IsInvoked1 = true;
-            SomeEvent2 += (s, e) => IsInvoked2 = true;
-            SomeEvent3 += (s, e) => IsInvoked3 = true;
+            void SomeEvent1() { IsInvoked1 = true; }; 
+            void SomeEvent2() { IsInvoked2 = true; }; 
+            void SomeEvent3() { IsInvoked3 = true; };
 
             //act
             alarms.Register(SomeEvent1, 1, true);

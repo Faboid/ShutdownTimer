@@ -17,8 +17,8 @@ namespace AutomaticShutdownTimerLibrary.Services {
             }
         }
 
-        public void Register(EventHandler<EventArgs> eventHandler, int timeToEvoke, bool singleFire) {
-            alarms.Add(new Alarm(eventHandler, timeToEvoke, singleFire));
+        public void Register(Action ringAction, int timeToEvoke, bool singleFire) {
+            alarms.Add(new Alarm(ringAction, timeToEvoke, singleFire));
         }
 
         public void ResetAll() {
