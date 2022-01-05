@@ -1,7 +1,4 @@
 ﻿using AutomaticShutdownTimerLibrary.Models.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomaticShutdownTimerLibrary.Models {
     public class Time : IReadOnlyTime {

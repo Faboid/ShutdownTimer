@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AutomaticShutdownTimerLibrary.Models.Interfaces {
+﻿namespace AutomaticShutdownTimerLibrary.Models.Interfaces {
     public interface IReadOnlyTime {
 
         int Seconds { get; }

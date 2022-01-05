@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Timers;
-using System.Threading;
-using System.Diagnostics;
 using AutomaticShutdownTimerLibrary;
 using AutomaticShutdownTimerLibrary.Models;
 using AutomaticShutdownTimerLibrary.Services;
 using AutomaticShutdownTimerLibrary.Services.Interfaces;
-using AutomaticShutdownTimerLibrary.Models.Interfaces;
 
 namespace AutomaticShutdownTimerUI {
     public partial class DashboardForm : Form {

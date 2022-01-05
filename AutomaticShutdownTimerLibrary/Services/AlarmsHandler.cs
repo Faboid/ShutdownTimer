@@ -3,7 +3,6 @@ using AutomaticShutdownTimerLibrary.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AutomaticShutdownTimerLibrary.Services {
     public class AlarmsHandler : IAlarmsHandler {

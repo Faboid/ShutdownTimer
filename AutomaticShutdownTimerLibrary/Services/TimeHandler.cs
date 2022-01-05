@@ -2,8 +2,6 @@
 using AutomaticShutdownTimerLibrary.Models.Interfaces;
 using AutomaticShutdownTimerLibrary.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Timers;
 
 namespace AutomaticShutdownTimerLibrary.Services {
