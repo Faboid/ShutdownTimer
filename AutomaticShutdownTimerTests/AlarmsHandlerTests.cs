@@ -44,11 +44,6 @@ namespace AutomaticShutdownTimerTests {
             Assert.False(IsInvoked);
         }
 
-        event EventHandler<EventArgs> SomeEvent1;
-        event EventHandler<EventArgs> SomeEvent2;
-        event EventHandler<EventArgs> SomeEvent3;
-
-
         [Fact]
         public void CorrectMultipleEventsAreRaised() {
 
