@@ -1,9 +1,4 @@
-﻿using AutomaticShutdownTimerLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutomaticShutdownTimerLibrary.Models;
 using Xunit;
 
 namespace AutomaticShutdownTimerTests {
@@ -59,7 +54,7 @@ namespace AutomaticShutdownTimerTests {
             int actual;
 
             //act
-            actual = time.GetTotalTimeValue();
+            actual = time.ToSeconds();
 
             //assert
             Assert.Equal(expected, actual);

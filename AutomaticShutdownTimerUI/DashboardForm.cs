@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Timers;
-using System.Threading;
-using System.Diagnostics;
 using AutomaticShutdownTimerLibrary;
+using AutomaticShutdownTimerLibrary.Models;
+using AutomaticShutdownTimerLibrary.Services;
+using AutomaticShutdownTimerLibrary.Services.Interfaces;
 
 namespace AutomaticShutdownTimerUI {
     public partial class DashboardForm : Form {
-        Time time;
+
+        IAlarmsHandler alarmsHandler;
+        TimeHandler timeHandler;
+
+        readonly Shutdown shutdown = new Shutdown();
         delegate void Callback();
 
         public DashboardForm() {
@@ -22,74 +21,65 @@ namespace AutomaticShutdownTimerUI {
 
         private void InitializeFormValues() {
             SetDefaultVisibilities();
-            Countdown.timer.Elapsed += Timer_Elapsed;
 
-            //set to 0 to avoid null-reference exceptions
-            time = new Time(0, 0, 0);
-        }
+            alarmsHandler = new AlarmsHandler();
+            alarmsHandler.Register(shutdown.Start, 0, true);
+            alarmsHandler.Register(StealFocus, 30, false);
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
-            Logic.MainLogic(time);
+            timeHandler = new TimeHandler(new Time(0, 0, 0), alarmsHandler);
 
-            RefreshTextBox();
-            if(time.GetTotalTimeValue() <= 30) {
-                StealFocus();
-            }
+            timeHandler.SecondHasPassed += (obj, time) => { RefreshTextBox(); };
         }
 
         private void RefreshTextBox() {
             if(timerTextBox.InvokeRequired) {
                 Invoke(new Callback(RefreshTextBox), new object[] { });
-            } else {
-                timerTextBox.Text = time.ToString();
-            }
+                return;
+            } 
+            
+            timerTextBox.Text = timeHandler.GetTimeAsReadOnly().ToString();
         }
 
         private void StealFocus() {
             if(this.InvokeRequired) {
                 Invoke(new Callback(StealFocus), new object[] { });
-            } else {
-                this.TopMost = true;
-                this.Activate();
+                return;
             }
+
+            this.TopMost = true;
+            this.Activate();
         }
 
-        private bool WarnIfZero() {
-            if((secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0) {
-                DialogResult result = MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
-                if(result == DialogResult.Yes) {
-                    //todo - introduce different way of handling this
-                    Logic.MainLogic(new Time(0, 0, 0));
+        private bool IsTimeZero() => (secondsPicker.Value + minutesPicker.Value + hoursPicker.Value) == 0;
+
+        private DialogResult Warn() => MessageBox.Show("Turn off the computer now?", "Shutdown?", MessageBoxButtons.YesNo);
+
+        private void StartButton_Click(object sender, EventArgs e) {
+
+            if(IsTimeZero()) {
+                DialogResult response = Warn();
+                if(response != DialogResult.Yes) {
+                    return;
                 }
-                return true;
+
+                shutdown.Start();
             }
-            return false;
+
+            timeHandler.Start((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
+            SetRunningVisibilities();
+            RefreshTextBox();
         }
 
-        private void startButton_Click(object sender, EventArgs e) {
-            if(!WarnIfZero()) {
-                time = new Time((int)hoursPicker.Value, (int)minutesPicker.Value, (int)secondsPicker.Value);
-
-                SetRunningVisibilities();
-
-                //set up timerTextBox text
-                RefreshTextBox();
-
-                //start timer
-                Countdown.Start();
-            }
-        }
-
-        private void stopButton_Click(object sender, EventArgs e) {
+        private void StopButton_Click(object sender, EventArgs e) {
             this.TopMost = false;
 
+            var time = timeHandler.GetTimeAsReadOnly();
             secondsPicker.Value = time.Seconds;
             minutesPicker.Value = time.Minutes;
             hoursPicker.Value = time.Hours;
 
             SetDefaultVisibilities();
-            //stop timer
-            Countdown.Stop();
+            timeHandler.Stop();
         }
 
         private void SetRunningVisibilities() {
